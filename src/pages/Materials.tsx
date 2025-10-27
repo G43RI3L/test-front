@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Plus, Search, TrendingDown, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,78 +14,67 @@ import {
 } from "@/components/ui/table";
 import { Layout } from "@/components/Layout";
 
+interface Material {
+  id: number;
+  name: string;
+  code: string;
+  quantity: number;
+  unit: string;
+  unitPrice: number;
+  totalValue: number;
+  status: string;
+  trend: string;
+  category: string;
+}
+
 const Materials = () => {
-  const materials = [
-    {
-      id: 1,
-      name: "Cimento CP-II",
-      code: "CIM-001",
-      quantity: 450,
-      unit: "sacos",
-      unitPrice: 35.0,
-      totalValue: 15750.0,
-      status: "high",
-      trend: "up",
-      category: "Materiais Básicos",
-    },
-    {
-      id: 2,
-      name: "Areia Média",
-      code: "ARE-001",
-      quantity: 25,
-      unit: "m³",
-      unitPrice: 85.0,
-      totalValue: 2125.0,
-      status: "medium",
-      trend: "down",
-      category: "Agregados",
-    },
-    {
-      id: 3,
-      name: "Tijolo Cerâmico",
-      code: "TIJ-001",
-      quantity: 8500,
-      unit: "unid",
-      unitPrice: 0.85,
-      totalValue: 7225.0,
-      status: "high",
-      trend: "up",
-      category: "Alvenaria",
-    },
-    {
-      id: 4,
-      name: "Brita 1",
-      code: "BRI-001",
-      quantity: 8,
-      unit: "m³",
-      unitPrice: 95.0,
-      totalValue: 760.0,
-      status: "low",
-      trend: "down",
-      category: "Agregados",
-    },
-    {
-      id: 5,
-      name: "Vergalhão 10mm",
-      code: "VER-010",
-      quantity: 120,
-      unit: "barras",
-      unitPrice: 45.0,
-      totalValue: 5400.0,
-      status: "medium",
-      trend: "up",
-      category: "Ferragens",
-    },
-  ];
+  const [materials, setMaterials] = useState<Material[]>([]);
+
+  // ✅ Carrega materiais fixos uma vez (ou do localStorage)
+  useEffect(() => {
+    const saved = localStorage.getItem("materials");
+    if (saved) {
+      setMaterials(JSON.parse(saved));
+    } else {
+      const defaultMaterials = [
+        {
+          id: 1,
+          name: "Cimento CP-II",
+          code: "CIM-001",
+          quantity: 450,
+          unit: "sacos",
+          unitPrice: 35.0,
+          totalValue: 15750.0,
+          status: "high",
+          trend: "up",
+          category: "Materiais Básicos",
+        },
+        {
+          id: 2,
+          name: "Areia Média",
+          code: "ARE-001",
+          quantity: 25,
+          unit: "m³",
+          unitPrice: 85.0,
+          totalValue: 2125.0,
+          status: "medium",
+          trend: "down",
+          category: "Agregados",
+        },
+      ];
+      setMaterials(defaultMaterials);
+      localStorage.setItem("materials", JSON.stringify(defaultMaterials));
+    }
+  }, []);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "high":
-        return <Badge className="badge-success">Alto</Badge>;
+        return <Badge className="bg-green-500 text-white">Alto</Badge>;
       case "medium":
-        return <Badge className="badge-warning">Médio</Badge>;
+        return <Badge className="bg-yellow-500 text-white">Médio</Badge>;
       case "low":
-        return <Badge className="badge-danger">Baixo</Badge>;
+        return <Badge className="bg-red-500 text-white">Baixo</Badge>;
       default:
         return null;
     }
@@ -93,7 +83,6 @@ const Materials = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold tracking-tight text-foreground">
@@ -103,24 +92,32 @@ const Materials = () => {
               Gerencie todos os materiais do seu inventário
             </p>
           </div>
-          <Button className="gap-2">
+          <Button
+            className="gap-2"
+            onClick={() => {
+              const novo = {
+                id: Date.now(),
+                name: "Novo Produto",
+                code: "NOVO-" + Date.now().toString().slice(-3),
+                quantity: 0,
+                unit: "unid",
+                unitPrice: 0,
+                totalValue: 0,
+                status: "medium",
+                trend: "up",
+                category: "Sem categoria",
+              };
+              const updated = [...materials, novo];
+              setMaterials(updated);
+              localStorage.setItem("materials", JSON.stringify(updated));
+            }}
+          >
             <Plus className="h-4 w-4" />
             Adicionar Material
           </Button>
         </div>
 
-        {/* Search and Filters */}
-        <div className="flex gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Buscar materiais por nome ou código..."
-              className="pl-9"
-            />
-          </div>
-        </div>
-
-        {/* Materials Table */}
+        {/* Tabela */}
         <Card>
           <CardHeader>
             <CardTitle>Lista de Materiais</CardTitle>
@@ -178,3 +175,4 @@ const Materials = () => {
 };
 
 export default Materials;
+
