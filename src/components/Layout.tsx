@@ -2,8 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Package, ArrowLeftRight, LayoutDashboard, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-// adição botão qr code
-import { QrCode } from "lucide-react";
 import { useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
@@ -15,7 +13,7 @@ export const QRScanner = () => {
     scanner.render(
       (decodedText: string) => {
         setResult(decodedText);
-        scanner.clear(); // para o scanner após leitura
+        scanner.clear();
         alert(`QR Code detectado: ${decodedText}`);
       },
       (errorMessage: string) => {
@@ -63,10 +61,8 @@ export const Layout = ({ children }: LayoutProps) => {
                 Controle completo do seu inventário
               </p>
             </div>
-            <Button className="gap-2">
-              <QrCode className="h-4 w-4" />
-              Escanear QR Code
-            </Button>
+            {/* Substituí o botão fixo pelo componente QRScanner */}
+            <QRScanner />
           </div>
 
           {/* Navigation */}
