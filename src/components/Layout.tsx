@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Package, ArrowLeftRight, LayoutDashboard, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+//import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
@@ -9,7 +9,7 @@ export const QRScanner = () => {
   const [result, setResult] = useState<string | null>(null);
 
   const startScanner = () => {
-    const scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    const scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250}, false );
     scanner.render(
       (decodedText: string) => {
         setResult(decodedText);
@@ -73,9 +73,9 @@ export const Layout = ({ children }: LayoutProps) => {
               return (
                 <Link key={item.path} to={item.path}>
                   <Button
-                    variant={isActive ? "default" : "ghost"}
-                    size="sm"
-                    className={cn("gap-2", !isActive && "text-muted-foreground")}
+                    className={`gap-2 px-3 py-1 rounded-md ${
+                      isActive ? "bg-blue-600 text-white" : "bg-transparent text-gray-600 hover:bg-gray-100"
+                    }`}
                   >
                     <Icon className="h-4 w-4" />
                     {item.label}

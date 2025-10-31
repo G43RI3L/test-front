@@ -8,8 +8,8 @@ export const CardHeader: React.FC<{ children: React.ReactNode }> = ({ children }
   <div className="mb-2">{children}</div>
 );
 
-export const CardContent: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div>{children}</div>
+export const CardContent: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
+  <div className={className}>{children}</div>
 );
 
 export const CardTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (

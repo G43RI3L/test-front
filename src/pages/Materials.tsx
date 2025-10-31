@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Search, TrendingDown, TrendingUp, QrCode } from "lucide-react";
+import { Plus, TrendingDown, TrendingUp, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -103,7 +103,7 @@ const Materials = () => {
 
   // ✅ Iniciar leitura de QR Code
   const startScanner = () => {
-    const scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    const scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 }, false);
     scanner.render(
       (decodedText: string) => {
         try {
@@ -119,6 +119,11 @@ const Materials = () => {
       (errorMessage: string) => console.warn(errorMessage)
     );
   };
+
+  // ✅ useEffect para iniciar scanner quando showScanner mudar
+  useEffect(() => {
+    if (showScanner) startScanner();
+  }, [showScanner]);
 
   return (
     <Layout>
@@ -139,7 +144,7 @@ const Materials = () => {
         </div>
 
         {/* Leitor de QR Code */}
-        {showScanner && <div id="reader" className="my-4" /> && startScanner()}
+        {showScanner && <div id="reader" className="my-4" />}
 
         {/* Formulário de novo material */}
         <Card>
@@ -185,7 +190,7 @@ const Materials = () => {
           <CardHeader>
             <CardTitle>Lista de Materiais</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
