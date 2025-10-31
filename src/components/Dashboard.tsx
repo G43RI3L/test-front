@@ -1,7 +1,7 @@
 import { Package, TrendingUp, AlertCircle } from "lucide-react";
-import { StatsCard } from "./StatsCard";
-import { MaterialsList } from "./MaterialsList";
-import { RecentTransactions } from "./RecentTransactions";
+import { StatsCard } from "../pages/StatsCard";
+import { MaterialsList } from "../pages/MaterialsList";
+import { RecentTransactions } from "../pages/RecentTransactions";
 import { Layout } from "./Layout";
 
 export const Dashboard = () => {
